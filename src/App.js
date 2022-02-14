@@ -1,24 +1,34 @@
-import logo from './logo.svg';
 import './App.css';
+import Header from './Header'
+import Search from './Search'
+import SearchResult from './SearchResult';
+import emojiList from './emojiList.json'
+import { useState } from 'react';
 
 function App() {
+  const [emojis, setEmojis] = useState([])
+  console.log(emojis)
+
+  const emojiSearch = (searchText, maxCount) => {
+    return emojiList.filter(({title, keywords}) => {
+      return title.includes(searchText) || keywords.includes(searchText)
+    })
+    .slice(0, maxCount)
+  }
+
+  const search = (event) => {
+    const searchResult = emojiSearch(event.target.value, 10)
+    setEmojis(searchResult)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className='navbar'>
+        <Header />
+        <Search search={search} />
+        <SearchResult searchResult={emojis} />
+      </div>
+    </>
   );
 }
 
